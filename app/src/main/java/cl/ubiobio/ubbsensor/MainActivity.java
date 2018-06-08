@@ -32,11 +32,15 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
 
+    private ArrayList<Float> promedio;
+
     private Map<String, String> params;
 
     //Variables globales para almacenar los datos de los sensores
-    private String temActual;
-    private int temProm;
+    private Float temMin;
+    private Float temMax;
+    private Float temProm;
+    private Float sumaProm;
     private int radActual;
     private int radProm;
     private int humActual;
@@ -63,14 +67,15 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         mediciones = new ArrayList<>();
+        promedio = new ArrayList<>();
 
         DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy"); //deja la fecha actual en el formato aceptado por la API
         //fecha= dateFormat.format(fechaActual);
-        fecha="07062018";
+        fecha="26052018";
         Log.d("LOG_WS", "Fecha: "+fecha);
         obtenerTemperatura(tokenAcceso,tokenTemp,fecha);
         editTemp = findViewById(R.id.temActual);
-        editTemp.setText(temActual);
+        //editTemp.setText(temActual);
     }
 
     private void generateToast(String msg){
@@ -80,7 +85,6 @@ public class MainActivity extends AppCompatActivity{
     //funcion que obtiene los valores del sensor de temperatura
 
     private void obtenerTemperatura(final String tokenAcces, final String tokenSensor, final String fechaHoy){ //sacar throws JSONException
-
 
         Log.d("LOG WS", "entre");
         String WS_URL = "http://arrau.chillan.ubiobio.cl:8075/ubbiot/web/mediciones/medicionespordia/"+tokenAcces+"/"+tokenSensor+"/"+fechaHoy;
@@ -92,7 +96,9 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONArray responseJson = new JSONArray(response);
+                            JSONObject responseJs = new JSONObject(response);
+
+                            JSONArray responseJson = responseJs.getJSONArray("data");
 
                             for(int i = 0; i < responseJson.length(); i++){
                                 //JSONObject o = responseJson.getJSONObject(i);
@@ -111,6 +117,26 @@ public class MainActivity extends AppCompatActivity{
                                     /*far.setLatitud(Double.parseDouble(lat));
                                     far.setLongitud(Double.parseDouble(lng));*/
 
+                                    //Para la primera vuelta establesco el valor de max y min de la temperatura como el primer valor del dia
+                                    if(i==0){
+                                        temMin = Float.parseFloat(o.getString("valor"));
+                                        temMax = Float.parseFloat(o.getString("valor"));
+                                        promedio.add(Float.parseFloat(o.getString("valor")));
+                                    }
+
+                                    //Si la temperatura de esta iteracion es menor que temMin, temMin obtiene el valor de la iteracion
+                                    if((Integer.parseInt(o.getString("valor"))<temMin)){
+                                        temMin = Float.parseFloat(o.getString("valor"));
+                                    }
+
+                                    //Si la temperatura de esta iteracion es mayor que temMax, temMax obtiene el valor de la iteracion
+                                    if((Integer.parseInt(o.getString("valor"))>temMax)){
+                                        temMax = Float.parseFloat(o.getString("valor"));
+                                    }
+
+
+
+
 
 
                                 }catch (NumberFormatException e){
@@ -120,8 +146,15 @@ public class MainActivity extends AppCompatActivity{
 
                                 mediciones.add(dat);
 
+
+
+
                             }
-                            temActual=mediciones.get(mediciones.size()).getValor();
+
+                            for(int i=0;i<promedio.size()-1;i++){
+                                temProm += promedio.get(i);
+                            }
+                            temProm = temProm/promedio.size();
 
                             //Log.d("LOG", "cantidad: " + farmaciasDeTurno.size());
 
@@ -139,4 +172,5 @@ public class MainActivity extends AppCompatActivity{
         );
         requestQueue.add(request);
     }
+
 }
