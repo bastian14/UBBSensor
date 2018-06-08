@@ -6,25 +6,33 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
+
+    private Map<String, String> params;
 
     //Variables globales para almacenar los datos de los sensores
     private String temActual;
@@ -38,7 +46,7 @@ public class MainActivity extends AppCompatActivity{
     private TextView editTemp;
 
     //Tokens para hacer la conexion con la API
-    private String tokenAcceso = "SYstxy8h0a";
+    private String tokenAcceso = "mhv8o25C7Q";
     private String tokenTemp = "E1yGxKAcrg";
     private String tokenRad = "8IvrZCP3qa";
     private String tokenHum = "VIbSnGKyLW";
@@ -47,22 +55,33 @@ public class MainActivity extends AppCompatActivity{
     private Date fechaActual = new Date();
     private String fecha;
 
+    private ArrayList<Datos> mediciones;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mediciones = new ArrayList<>();
+
         DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy"); //deja la fecha actual en el formato aceptado por la API
-        fecha= dateFormat.format(fechaActual);
+        //fecha= dateFormat.format(fechaActual);
+        fecha="07062018";
         Log.d("LOG_WS", "Fecha: "+fecha);
         obtenerTemperatura(tokenAcceso,tokenTemp,fecha);
         editTemp = findViewById(R.id.temActual);
         editTemp.setText(temActual);
     }
 
+    private void generateToast(String msg){
+        Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_SHORT).show();
+    }
+
     //funcion que obtiene los valores del sensor de temperatura
 
-    private void obtenerTemperatura(final String tokenAcces, final String tokenSensor, final String fechaHoy){
+    private void obtenerTemperatura(final String tokenAcces, final String tokenSensor, final String fechaHoy){ //sacar throws JSONException
+
+
         Log.d("LOG WS", "entre");
         String WS_URL = "http://arrau.chillan.ubiobio.cl:8075/ubbiot/web/mediciones/medicionespordia/"+tokenAcces+"/"+tokenSensor+"/"+fechaHoy;
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -72,20 +91,40 @@ public class MainActivity extends AppCompatActivity{
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response) {
-                        Log.d("LOG WS", response);
                         try {
-                            Log.d("LOG WS", "entre al try");
-                            JSONObject responseJson = new JSONObject(response);
-                            Log.d("LOG WS", "fecha: " + responseJson.getJSONObject("data").getString("fecha"));
-                            Log.d("LOG WS", "hora: "+ responseJson.getJSONObject("data").getString("hora"));
-                            Log.d("LOG WS", "valor: "+ responseJson.getJSONObject("data").getString("valor"));
-                            temActual = responseJson.getJSONObject("data").getString("valor");
-                            //generateToast(responseJson.getString("info"));
-                            if(responseJson.getBoolean("resp")){
-                                //iniciar otra actividad.....
-                                //final String login = responseJson.getJSONObject("data").getString("nombres");
-                            }else{
+                            JSONArray responseJson = new JSONArray(response);
+
+                            for(int i = 0; i < responseJson.length(); i++){
+                                //JSONObject o = responseJson.getJSONObject(i);
+                                JSONObject o = responseJson.getJSONObject(i);
+                                Datos dat = new Datos();
+
+                                Log.d("Fecha: ",o.getString("fecha"));
+                                Log.d("Hora: ",o.getString("hora"));
+                                Log.d("Valor: ",o.getString("valor"));
+
+                                dat.setFecha(o.getString("fecha"));
+                                dat.setHora(o.getString("hora"));
+                                dat.setValor(o.getString("valor"));
+
+                                try{
+                                    /*far.setLatitud(Double.parseDouble(lat));
+                                    far.setLongitud(Double.parseDouble(lng));*/
+
+
+
+                                }catch (NumberFormatException e){
+                                   /* far.setLatitud(0);
+                                    far.setLongitud(0);*/
+                                }
+
+                                mediciones.add(dat);
+
                             }
+                            temActual=mediciones.get(mediciones.size()).getValor();
+
+                            //Log.d("LOG", "cantidad: " + farmaciasDeTurno.size());
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -94,19 +133,10 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("LOG WS", error.toString());
-                //generateToast("Error en el WEB Service");
+                generateToast("Error en el WEB Service");
             }
         }
-        ){
-           @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("TokenAcceso",tokenAcces);
-                params.put("TokenSensor",tokenTemp);
-                params.put("Fecha",fechaHoy);
-                return params;
-            }
-        };
+        );
         requestQueue.add(request);
     }
 }
