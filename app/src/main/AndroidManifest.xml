@@ -19,6 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Temperatura" />
+        <activity android:name=".Radiacion" />
+        <activity android:name=".Humedad"></activity>
     </application>
 
 </manifest>
