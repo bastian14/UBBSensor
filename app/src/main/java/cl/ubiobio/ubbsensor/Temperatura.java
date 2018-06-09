@@ -41,8 +41,6 @@ public class Temperatura extends AppCompatActivity {
     //arreglo para almacenar todas las temperaturas de un dia determinado
     private ArrayList<Integer> promedioTemp;
 
-    private Map<String, String> params;
-
     //Variables globales para almacenar los datos de los sensores
     private int temMin;
     private int temMax;
@@ -68,7 +66,7 @@ public class Temperatura extends AppCompatActivity {
 
         temProm=Float.valueOf(0);
         //codigo para desplegar las fechas
-        mDisplayDate = (TextView) findViewById(R.id.tvDate);
+        mDisplayDate = (TextView) findViewById(R.id.tvDateTemp);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,8 +108,10 @@ public class Temperatura extends AppCompatActivity {
                 fecha= dia+""+mes+""+year;
                 //fecha="26052018";
                 Log.d("LOG_WS", "Fecha: "+fecha);
-                //vacio las temperaturas y el arreglo de temperaturas
+                //vacio el arreglo de temperaturas
                 promedioTemp.clear();
+
+                //Inicio el metodo que consulta a la API segun la fecha entregada por parametro y setea las temperaturas de la pantalla
                 obtenerTemperatura(tokenAcceso,tokenTemp,fecha);
             }
         };
@@ -139,12 +139,8 @@ public class Temperatura extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONObject responseJs = new JSONObject(response);
-
                             JSONArray responseJson = responseJs.getJSONArray("data");
 
-                            temMin=0;
-                            temMax=0;
-                            temProm=Float.valueOf(0);
                             for(int i = 0; i < responseJson.length(); i++){
                                 JSONObject o = responseJson.getJSONObject(i);
                                 Datos dat = new Datos();
@@ -202,21 +198,32 @@ public class Temperatura extends AppCompatActivity {
                             editTempProm.setText(String.valueOf(temProm));
 
                         } catch (JSONException e) {
-                            //si hay un erro los seteo en 0
+                            //si hay un error los seteo en 0
                             editTempMin = findViewById(R.id.temMin);
                             editTempMin.setText("0");
                             editTempMax = findViewById(R.id.temMax);
                             editTempMax.setText("0");
                             editTempProm = findViewById(R.id.temProm);
                             editTempProm.setText("0");
+                            /*Existe el caso en el que la API devuelve un JSON como objeto y no como array (cuando la conexion es exitosa, pero no
+                            existen mediciones), en ese caso envio el siguiente mensaje*/
+                            generateToast("Error: No existen datos para la fecha seleccionada");
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //si hay un error los seteo en 0
+                editTempMin = findViewById(R.id.temMin);
+                editTempMin.setText("0");
+                editTempMax = findViewById(R.id.temMax);
+                editTempMax.setText("0");
+                editTempProm = findViewById(R.id.temProm);
+                editTempProm.setText("0");
+                //cuando la fecha ingresada es superior a la actual envio el siguiente mensaje
                 Log.d("LOG WS", error.toString());
-                generateToast("Error en el WEB Service");
+                generateToast("Error: No existen datos para la fecha seleccionada");
             }
         }
         );
