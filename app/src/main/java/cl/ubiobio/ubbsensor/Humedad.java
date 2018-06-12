@@ -1,5 +1,6 @@
 package cl.ubiobio.ubbsensor;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -27,6 +28,9 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class Humedad extends AppCompatActivity {
+
+    //Titulo del ActionBar
+    private TextView actionBarTitle;
 
     //variables utilizadas para desplegar fecha
     private static final String TAG = "MainActivity";
@@ -58,6 +62,11 @@ public class Humedad extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_humedad);
+        //cambio el ActionBar por uno personalizado (centrado)
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.custom_action_bar);
+        actionBarTitle = (TextView) findViewById(R.id.customActionBar);
+        actionBarTitle.setText("Humedad");
 
         humProm=Float.valueOf(0);
         //codigo para desplegar las fechas

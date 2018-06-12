@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //oculto el ActionBar
+        getSupportActionBar().hide();
 
         btemp =findViewById(R.id.tempeButton);
         bhum = findViewById(R.id.humeButton);
