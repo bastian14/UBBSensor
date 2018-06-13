@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="cl.ubiobio.ubbsensor.Temperatura">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Temperatura">
 
-
-        <TextView
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Seleccione una fecha"
-            android:id="@+id/tvDateTemp"
+            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:textAlignment="center"
-            android:layout_centerHorizontal="true"
-            android:textSize="25sp"/>
-
-    </LinearLayout>
+            android:layout_marginTop="10dp"
+            tools:context="cl.ubiobio.ubbsensor.Temperatura">
 
 
-    <LinearLayout
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Seleccione una fecha"
+                android:id="@+id/tvDateTemp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textSize="25sp"/>
+
+        </LinearLayout>
+
+
+   <!-- <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
@@ -97,6 +99,121 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text=""/>
-    </LinearLayout>
+    </LinearLayout>-->
+    <!-- <ScrollView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content">-->
 
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_gravity="center"
+         android:layout_marginBottom="4dp">
+
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="vertical"
+             android:layout_gravity="center"
+             android:background="#D8D8D8"
+             android:layout_marginBottom="4dp"
+             android:layout_marginRight="4dp"
+             android:layout_weight="1">
+
+             <com.github.anastr.speedviewlib.ImageSpeedometer
+                 android:id="@+id/gaugeTempMax"
+                 android:layout_width="160dp"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_horizontal"
+                 app:sv_image="@drawable/for_image_speedometer"
+                 app:sv_indicator="LineIndicator"
+                 app:sv_indicatorColor="#a750bcff"
+                 app:sv_speedTextColor="#fff"
+                 app:sv_unitTextColor="#fff"
+                 app:sv_unit="°C"
+                 android:layout_marginTop="20dp"/>
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Temperatura máxima"
+                 android:layout_gravity="center"
+                 android:layout_marginTop="5dp"
+                 android:textStyle="bold"
+                 android:textColor="#000000"
+                 android:textSize="18dp"/>
+
+         </LinearLayout>
+
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="vertical"
+             android:layout_gravity="center"
+             android:background="#D8D8D8"
+             android:layout_marginBottom="4dp"
+             android:layout_marginLeft="4dp"
+             android:layout_weight="1">
+
+             <com.github.anastr.speedviewlib.ImageSpeedometer
+                 android:id="@+id/gaugeTempMin"
+                 android:layout_width="160dp"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_horizontal"
+                 app:sv_image="@drawable/for_image_speedometer"
+                 app:sv_indicator="LineIndicator"
+                 app:sv_indicatorColor="#a750bcff"
+                 app:sv_speedTextColor="#fff"
+                 app:sv_unitTextColor="#fff"
+                 app:sv_unit="°C"
+                 android:layout_marginTop="20dp"/>
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Temperatura mínima"
+                 android:layout_gravity="center"
+                 android:layout_marginTop="5dp"
+                 android:textStyle="bold"
+                 android:textColor="#000000"
+                 android:textSize="18dp"/>
+         </LinearLayout>
+
+
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:layout_gravity="center"
+         android:background="#D8D8D8">
+
+         <com.github.anastr.speedviewlib.ImageSpeedometer
+             android:id="@+id/gaugeTempProm"
+             android:layout_width="160dp"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_horizontal"
+             app:sv_image="@drawable/for_image_speedometer"
+             app:sv_indicator="LineIndicator"
+             app:sv_indicatorColor="#a750bcff"
+             app:sv_speedTextColor="#fff"
+             app:sv_unitTextColor="#fff"
+             app:sv_unit="°C"
+             android:layout_marginTop="20dp"/>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Temperatura promedio"
+             android:layout_gravity="center"
+             android:layout_marginTop="5dp"
+             android:textStyle="bold"
+             android:textColor="#000000"
+             android:textSize="18dp"/>
+
+     </LinearLayout>
+
+   <!--  </ScrollView>-->
 </LinearLayout>
