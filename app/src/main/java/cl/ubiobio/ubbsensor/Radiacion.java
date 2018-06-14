@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.anastr.speedviewlib.ImageLinearGauge;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,6 +28,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Radiacion extends AppCompatActivity {
+
+    ImageLinearGauge gaugeRadMax;
+    ImageLinearGauge gaugeRadMin;
+    ImageLinearGauge gaugeRadProm;
 
     //Titulo del ActionBar
     private TextView actionBarTitle;
@@ -46,11 +51,6 @@ public class Radiacion extends AppCompatActivity {
     private int radMax;
     private Float radProm;
 
-    //Texto a editar en el layout
-    private TextView editRadMin;
-    private TextView editRadMax;
-    private TextView editRadProm;
-
     //Tokens para hacer la conexion con la API
     private String tokenAcceso = "mhv8o25C7Q";
     private String tokenRad = "8IvrZCP3qa";
@@ -68,6 +68,12 @@ public class Radiacion extends AppCompatActivity {
         actionBarTitle.setText("Radiación");
 
         radProm=Float.valueOf(0);
+
+        //inicializo cada gauge (min, max, prom)
+        gaugeRadMax = findViewById(R.id.gaugeRadMax);
+        gaugeRadMin = findViewById(R.id.gaugeRadMin);
+        gaugeRadProm = findViewById(R.id.gaugeRadProm);
+
         //codigo para desplegar las fechas
         mDisplayDate = (TextView) findViewById(R.id.tvDateRad);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -146,15 +152,10 @@ public class Radiacion extends AppCompatActivity {
 
                             for(int i = 0; i < responseJson.length(); i++){
                                 JSONObject o = responseJson.getJSONObject(i);
-                                Datos dat = new Datos();
 
                                 Log.d("Fecha: ",o.getString("fecha"));
                                 Log.d("Hora: ",o.getString("hora"));
                                 Log.d("Valor: ",o.getString("valor"));
-
-                                dat.setFecha(o.getString("fecha"));
-                                dat.setHora(o.getString("hora"));
-                                dat.setValor(o.getString("valor"));
 
                                 try{
                                     //Para la primera vuelta establesco el valor de max y min de la radiacion como el primer valor del dia
@@ -193,21 +194,16 @@ public class Radiacion extends AppCompatActivity {
                             radProm = radProm/Float.valueOf(promedioRad.size()-1);
 
                             //seteo los valores de radiacion maxima, minima y promedio del layout
-                            editRadMin = findViewById(R.id.radMin);
-                            editRadMin.setText(String.valueOf(radMin));
-                            editRadMax = findViewById(R.id.radMax);
-                            editRadMax.setText(String.valueOf(radMax));
-                            editRadProm = findViewById(R.id.radProm);
-                            editRadProm.setText(String.valueOf(radProm));
+                            gaugeRadMax.speedTo(radMax);
+                            gaugeRadMin.speedTo(radMin);
+                            gaugeRadProm.speedTo(Math.round(radProm));
 
                         } catch (JSONException e) {
                             //si hay un error los seteo en 0
-                            editRadMin = findViewById(R.id.radMin);
-                            editRadMin.setText("0");
-                            editRadMax = findViewById(R.id.radMax);
-                            editRadMax.setText("0");
-                            editRadProm = findViewById(R.id.radProm);
-                            editRadProm.setText("0");
+                            gaugeRadMax.speedTo(0);
+                            gaugeRadMin.speedTo(0);
+                            gaugeRadProm.speedTo(0);
+
                             /*Existe el caso en el que la API devuelve un JSON como objeto y no como array (cuando la conexion es exitosa, pero no
                             existen mediciones), en ese caso envio el siguiente mensaje*/
                             generateToast("Error: No existen datos para la fecha seleccionada");
@@ -218,12 +214,10 @@ public class Radiacion extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //si hay un error los seteo en 0
-                editRadMin = findViewById(R.id.radMin);
-                editRadMin.setText("0");
-                editRadMax = findViewById(R.id.radMax);
-                editRadMax.setText("0");
-                editRadProm = findViewById(R.id.radProm);
-                editRadProm.setText("0");
+                gaugeRadMax.speedTo(0);
+                gaugeRadMin.speedTo(0);
+                gaugeRadProm.speedTo(0);
+
                 //cuando la fecha ingresada es superior a la actual envio el siguiente mensaje
                 Log.d("LOG WS", error.toString());
                 generateToast("Error: No existen datos para la fecha seleccionada");

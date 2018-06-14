@@ -33,90 +33,19 @@
         </LinearLayout>
 
 
-   <!-- <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Temperatura">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temperatura máxima:"/>
-
-        <TextView
-            android:id="@+id/temMax"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Temperatura">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temperatura mínima:"/>
-
-        <TextView
-            android:id="@+id/temMin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Temperatura">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Temperatura promedio:"/>
-
-        <TextView
-            android:id="@+id/temProm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""/>
-    </LinearLayout>-->
-    <!-- <ScrollView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content">-->
-
      <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:orientation="horizontal"
          android:layout_gravity="center"
-         android:layout_marginBottom="4dp">
+         android:layout_weight="1"
+         android:background="#8c8c8c">
 
          <LinearLayout
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:orientation="vertical"
              android:layout_gravity="center"
-             android:background="#D8D8D8"
              android:layout_marginBottom="4dp"
              android:layout_marginRight="4dp"
              android:layout_weight="1">
@@ -131,7 +60,13 @@
                  app:sv_indicatorColor="#a750bcff"
                  app:sv_speedTextColor="#fff"
                  app:sv_unitTextColor="#fff"
+                 app:sv_withTremble="false"
                  app:sv_unit="°C"
+                 app:sv_speedTextFormat="INTEGER"
+                 app:sv_tickNumber="2"
+                 app:sv_minSpeed="-10"
+                 app:sv_maxSpeed="60"
+                 app:sv_textColor="#ffffff"
                  android:layout_marginTop="20dp"/>
 
              <TextView
@@ -151,7 +86,6 @@
              android:layout_height="wrap_content"
              android:orientation="vertical"
              android:layout_gravity="center"
-             android:background="#D8D8D8"
              android:layout_marginBottom="4dp"
              android:layout_marginLeft="4dp"
              android:layout_weight="1">
@@ -166,7 +100,13 @@
                  app:sv_indicatorColor="#a750bcff"
                  app:sv_speedTextColor="#fff"
                  app:sv_unitTextColor="#fff"
+                 app:sv_withTremble="false"
                  app:sv_unit="°C"
+                 app:sv_speedTextFormat="INTEGER"
+                 app:sv_tickNumber="2"
+                 app:sv_minSpeed="-10"
+                 app:sv_maxSpeed="60"
+                 app:sv_textColor="#ffffff"
                  android:layout_marginTop="20dp"/>
 
              <TextView
@@ -188,7 +128,7 @@
          android:layout_height="wrap_content"
          android:orientation="vertical"
          android:layout_gravity="center"
-         android:background="#D8D8D8">
+         android:background="#8c8c8c">
 
          <com.github.anastr.speedviewlib.ImageSpeedometer
              android:id="@+id/gaugeTempProm"
@@ -200,8 +140,13 @@
              app:sv_indicatorColor="#a750bcff"
              app:sv_speedTextColor="#fff"
              app:sv_unitTextColor="#fff"
+             app:sv_withTremble="false"
              app:sv_unit="°C"
-             android:layout_marginTop="20dp"/>
+             app:sv_speedTextFormat="INTEGER"
+             app:sv_tickNumber="2"
+             app:sv_minSpeed="-10"
+             app:sv_maxSpeed="60"
+             app:sv_textColor="#ffffff" />
 
          <TextView
              android:layout_width="wrap_content"
@@ -215,5 +160,4 @@
 
      </LinearLayout>
 
-   <!--  </ScrollView>-->
 </LinearLayout>

@@ -41,8 +41,6 @@ public class Temperatura extends AppCompatActivity {
     ImageSpeedometer gaugeTempMax;
     ImageSpeedometer gaugeTempMin;
     ImageSpeedometer gaugeTempProm;
-    Speedometer speedometer;
-
 
     //Titulo del ActionBar
     private TextView actionBarTitle;
@@ -62,16 +60,9 @@ public class Temperatura extends AppCompatActivity {
     private int temMax;
     private Float temProm;
 
-    //Texto a editar en el layout
-    private TextView editTempMin;
-    private TextView editTempMax;
-    private TextView editTempProm;
-
     //Tokens para hacer la conexion con la API
     private String tokenAcceso = "mhv8o25C7Q";
     private String tokenTemp = "E1yGxKAcrg";
-    private String tokenRad = "8IvrZCP3qa";
-    private String tokenHum = "VIbSnGKyLW";
 
     private String fecha;
 
@@ -85,8 +76,13 @@ public class Temperatura extends AppCompatActivity {
         actionBarTitle = (TextView) findViewById(R.id.customActionBar);
         actionBarTitle.setText("Temperatura");
 
-
         temProm=Float.valueOf(0);
+
+        //inicializo cada gauge (min, max, prom)
+        gaugeTempMax = findViewById(R.id.gaugeTempMax);
+        gaugeTempMin = findViewById(R.id.gaugeTempMin);
+        gaugeTempProm = findViewById(R.id.gaugeTempProm);
+
         //codigo para desplegar las fechas
         mDisplayDate = (TextView) findViewById(R.id.tvDateTemp);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -168,15 +164,6 @@ public class Temperatura extends AppCompatActivity {
 
                             for(int i = 0; i < responseJson.length(); i++){
                                 JSONObject o = responseJson.getJSONObject(i);
-                                Datos dat = new Datos();
-
-                                Log.d("Fecha: ",o.getString("fecha"));
-                                Log.d("Hora: ",o.getString("hora"));
-                                Log.d("Valor: ",o.getString("valor"));
-
-                                dat.setFecha(o.getString("fecha"));
-                                dat.setHora(o.getString("hora"));
-                                dat.setValor(o.getString("valor"));
 
                                 try{
                                     //Para la primera vuelta establesco el valor de max y min de la temperatura como el primer valor del dia
@@ -214,49 +201,19 @@ public class Temperatura extends AppCompatActivity {
                             //divido la suma de todas las temperaturas por el tamaño del arreglo
                             temProm = temProm/Float.valueOf(promedioTemp.size()-1);
 
-                            /*//seteo los valores de temperatura maxima, minima y promedio del layout
-                            //editTempMin = findViewById(R.id.temMin);
-                            editTempMin.setText(String.valueOf(temMin));
-                            //editTempMax = findViewById(R.id.temMax);
-                            editTempMax.setText(String.valueOf(temMax));
-                            //editTempProm = findViewById(R.id.temProm);
-                            editTempProm.setText(String.valueOf(temProm));*/
-
                             //seteo los valores de temperatura maxima, minima y promedio del gauge
-                            gaugeTempMax = findViewById(R.id.gaugeTempMax);
-                            gaugeTempMax.setWithTremble(false);
                             gaugeTempMax.speedTo(temMax);
-
-                            gaugeTempMin = findViewById(R.id.gaugeTempMin);
-                            gaugeTempMin.setWithTremble(false);
                             gaugeTempMin.speedTo(temMin);
-
-                            gaugeTempProm = findViewById(R.id.gaugeTempProm);
-                            gaugeTempProm.setWithTremble(false);
                             gaugeTempProm.speedTo(Math.round(temProm));
 
 
 
                         } catch (JSONException e) {
                             //si hay un error los seteo en 0
-                            gaugeTempMax = findViewById(R.id.gaugeTempMax);
-                            gaugeTempMax.setWithTremble(false);
-                            gaugeTempMax.speedTo(0);
+                            gaugeTempMax.speedTo(-10);
+                            gaugeTempMin.speedTo(-10);
+                            gaugeTempProm.speedTo(-10);
 
-                            gaugeTempMin = findViewById(R.id.gaugeTempMin);
-                            gaugeTempMin.setWithTremble(false);
-                            gaugeTempMin.speedTo(0);
-
-                            gaugeTempProm = findViewById(R.id.gaugeTempProm);
-                            gaugeTempProm.setWithTremble(false);
-                            gaugeTempProm.speedTo(0);
-                            /*//si hay un error los seteo en 0
-                            // editTempMin = findViewById(R.id.temMin);
-                            editTempMin.setText("0");
-                            //editTempMax = findViewById(R.id.temMax);
-                            editTempMax.setText("0");
-                            //editTempProm = findViewById(R.id.temProm);
-                            editTempProm.setText("0");*/
                             /*Existe el caso en el que la API devuelve un JSON como objeto y no como array (cuando la conexion es exitosa, pero no
                             existen mediciones), en ese caso envio el siguiente mensaje*/
                             generateToast("Error: No existen datos para la fecha seleccionada");
@@ -267,24 +224,10 @@ public class Temperatura extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //si hay un error los seteo en 0
-                gaugeTempMax = findViewById(R.id.gaugeTempMax);
-                gaugeTempMax.setWithTremble(false);
-                gaugeTempMax.speedTo(0);
+                gaugeTempMax.speedTo(-10);
+                gaugeTempMin.speedTo(-10);
+                gaugeTempProm.speedTo(-10);
 
-                gaugeTempMin = findViewById(R.id.gaugeTempMin);
-                gaugeTempMin.setWithTremble(false);
-                gaugeTempMin.speedTo(0);
-
-                gaugeTempProm = findViewById(R.id.gaugeTempProm);
-                gaugeTempProm.setWithTremble(false);
-                gaugeTempProm.speedTo(0);
-                /*//si hay un error los seteo en 0
-                //editTempMin = findViewById(R.id.temMin);
-                editTempMin.setText("0");
-                //editTempMax = findViewById(R.id.temMax);
-                editTempMax.setText("0");
-                //editTempProm = findViewById(R.id.temProm);
-                editTempProm.setText("0");*/
                 //cuando la fecha ingresada es superior a la actual envio el siguiente mensaje
                 Log.d("LOG WS", error.toString());
                 generateToast("Error: No existen datos para la fecha seleccionada");

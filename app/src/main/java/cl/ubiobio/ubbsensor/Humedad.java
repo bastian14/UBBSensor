@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.anastr.speedviewlib.ProgressiveGauge;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +26,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 
 public class Humedad extends AppCompatActivity {
+
+    ProgressiveGauge gaugeHumMax;
+    ProgressiveGauge gaugeHumMin;
+    ProgressiveGauge gaugeHumProm;
 
     //Titulo del ActionBar
     private TextView actionBarTitle;
@@ -47,11 +51,6 @@ public class Humedad extends AppCompatActivity {
     private int humMax;
     private Float humProm;
 
-    //Texto a editar en el layout
-    private TextView editHumMin;
-    private TextView editHumMax;
-    private TextView editHumProm;
-
     //Tokens para hacer la conexion con la API
     private String tokenAcceso = "mhv8o25C7Q";
     private String tokenHum = "VIbSnGKyLW";
@@ -69,6 +68,12 @@ public class Humedad extends AppCompatActivity {
         actionBarTitle.setText("Humedad");
 
         humProm=Float.valueOf(0);
+
+        //inicializo cada gauge (min, max, prom)
+        gaugeHumMax = findViewById(R.id.gaugeHumMax);
+        gaugeHumMin = findViewById(R.id.gaugeHumMin);
+        gaugeHumProm = findViewById(R.id.gaugeHumProm);
+
         //codigo para desplegar las fechas
         mDisplayDate = (TextView) findViewById(R.id.tvDateHum);
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
@@ -147,15 +152,11 @@ public class Humedad extends AppCompatActivity {
 
                             for(int i = 0; i < responseJson.length(); i++){
                                 JSONObject o = responseJson.getJSONObject(i);
-                                Datos dat = new Datos();
 
                                 Log.d("Fecha: ",o.getString("fecha"));
                                 Log.d("Hora: ",o.getString("hora"));
                                 Log.d("Valor: ",o.getString("valor"));
 
-                                dat.setFecha(o.getString("fecha"));
-                                dat.setHora(o.getString("hora"));
-                                dat.setValor(o.getString("valor"));
 
                                 try{
                                     //Para la primera vuelta establesco el valor de max y min de la humedad como el primer valor del dia
@@ -193,22 +194,17 @@ public class Humedad extends AppCompatActivity {
                             //divido la suma de todas las humedades por el tamaño del arreglo
                             humProm = humProm/Float.valueOf(promedioHum.size()-1);
 
-                            //seteo los valores de humedad maxima, minima y promedio del layout
-                            editHumMin = findViewById(R.id.humMin);
-                            editHumMin.setText(String.valueOf(humMin));
-                            editHumMax = findViewById(R.id.humMax);
-                            editHumMax.setText(String.valueOf(humMax));
-                            editHumProm = findViewById(R.id.humProm);
-                            editHumProm.setText(String.valueOf(humProm));
+                            //seteo los valores de humedad maxima, minima y promedio del gauge
+                            gaugeHumMax.speedTo(humMax);
+                            gaugeHumMin.speedTo(humMin);
+                            gaugeHumProm.speedTo(Math.round(humProm));
 
                         } catch (JSONException e) {
                             //si hay un error los seteo en 0
-                            editHumMin = findViewById(R.id.humMin);
-                            editHumMin.setText("0");
-                            editHumMax = findViewById(R.id.humMax);
-                            editHumMax.setText("0");
-                            editHumProm = findViewById(R.id.humProm);
-                            editHumProm.setText("0");
+                            gaugeHumMax.speedTo(0);
+                            gaugeHumMin.speedTo(0);
+                            gaugeHumProm.speedTo(0);
+
                             /*Existe el caso en el que la API devuelve un JSON como objeto y no como array (cuando la conexion es exitosa, pero no
                             existen mediciones), en ese caso envio el siguiente mensaje*/
                             generateToast("Error: No existen datos para la fecha seleccionada");
@@ -219,12 +215,10 @@ public class Humedad extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //si hay un error los seteo en 0
-                editHumMin = findViewById(R.id.humMin);
-                editHumMin.setText("0");
-                editHumMax = findViewById(R.id.humMax);
-                editHumMax.setText("0");
-                editHumProm = findViewById(R.id.humProm);
-                editHumProm.setText("0");
+                gaugeHumMax.speedTo(0);
+                gaugeHumMin.speedTo(0);
+                gaugeHumProm.speedTo(0);
+
                 //cuando la fecha ingresada es superior a la actual envio el siguiente mensaje
                 Log.d("LOG WS", error.toString());
                 generateToast("Error: No existen datos para la fecha seleccionada");

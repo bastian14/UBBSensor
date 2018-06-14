@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="cl.ubiobio.ubbsensor.Radiacion">
+
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,7 +21,7 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Seleccione una fecha"
             android:id="@+id/tvDateRad"
@@ -32,71 +34,140 @@
 
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Radiacion">
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Radiación máxima:"/>
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:background="#8c8c8c"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/radMax"
-            android:layout_width="wrap_content"
+            <com.github.anastr.speedviewlib.ImageLinearGauge
+                android:id="@+id/gaugeRadMax"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:sv_orientation="HORIZONTAL"
+                app:sv_speedTextPosition="BOTTOM_CENTER"
+                app:sv_unitUnderSpeedText="false"
+                app:sv_speedometerBackColor="#000"
+                app:sv_image="@drawable/fire"
+                app:sv_speedTextSize="25dp"
+                app:sv_unitTextSize="18dp"
+                app:sv_speedTextColor="#fff"
+                app:sv_unitTextColor="#fff"
+                app:sv_withTremble="false"
+                app:sv_unit="nm"
+                app:sv_speedTextFormat="INTEGER"
+                app:sv_tickNumber="2"
+                app:sv_minSpeed="0"
+                app:sv_maxSpeed="1000"
+                app:sv_textColor="#ffffff"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radiación máxima"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""/>
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:background="#8c8c8c"
+            android:layout_weight="1">
 
-    </LinearLayout>
+            <com.github.anastr.speedviewlib.ImageLinearGauge
+                android:id="@+id/gaugeRadMin"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:sv_orientation="HORIZONTAL"
+                app:sv_speedTextPosition="BOTTOM_CENTER"
+                app:sv_unitUnderSpeedText="false"
+                app:sv_speedometerBackColor="#000"
+                app:sv_image="@drawable/fire"
+                app:sv_speedTextSize="25dp"
+                app:sv_unitTextSize="18dp"
+                app:sv_speedTextColor="#fff"
+                app:sv_unitTextColor="#fff"
+                app:sv_withTremble="false"
+                app:sv_unit="nm"
+                app:sv_speedTextFormat="INTEGER"
+                app:sv_tickNumber="2"
+                app:sv_minSpeed="0"
+                app:sv_maxSpeed="1000"
+                app:sv_textColor="#ffffff"/>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Radiacion">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radiación mínima"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="18dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Radiación mínima:"/>
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:background="#8c8c8c"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/radMin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""/>
+            <com.github.anastr.speedviewlib.ImageLinearGauge
+                android:id="@+id/gaugeRadProm"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:sv_orientation="HORIZONTAL"
+                app:sv_speedTextPosition="BOTTOM_CENTER"
+                app:sv_unitUnderSpeedText="false"
+                app:sv_speedometerBackColor="#000"
+                app:sv_image="@drawable/fire"
+                app:sv_speedTextSize="25dp"
+                app:sv_unitTextSize="18dp"
+                app:sv_speedTextColor="#fff"
+                app:sv_unitTextColor="#fff"
+                app:sv_withTremble="false"
+                app:sv_unit="nm"
+                app:sv_speedTextFormat="INTEGER"
+                app:sv_tickNumber="2"
+                app:sv_minSpeed="0"
+                app:sv_maxSpeed="1000"
+                app:sv_textColor="#ffffff"/>
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Radiación promedio"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        tools:context="cl.ubiobio.ubbsensor.Radiacion">
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Radiación promedio:"/>
-
-        <TextView
-            android:id="@+id/radProm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text=""/>
     </LinearLayout>
 
 </LinearLayout>
+
